@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Accounts</ion-title>
+  </ion-navbar>
+  
+    <ion-searchbar color="header" [(ngModel)]="myInput" [showCancelButton]="shouldShowCancel" (ionInput)="onInput($event)" (ionCancel)="onCancel($event)">
+    </ion-searchbar>
+
+</ion-header>
+
+<ion-content padding>
+  
+<div *ngIf="myInput == null">
+  <ion-list> 
+    <button ion-item   *ngFor="let account of  getAccounts();" (click)="showDetails(account.id);" > 
+   <input item-start  type='checkbox' name='{{account.id}}' *ngIf="isselect()==false" (change)="addprop1($event,account.total_bill)" /> 
+   <input item-start  type='checkbox' name='{{account.id}}' *ngIf="isselect()==true" ischecked=false (change)="addprop1($event,account.total_bill)" />
+
+      <h2 >{{account.account_number}}</h2> 
+    <div> <p style='float:left;font-size:12px;'> total service: {{account.total_service}}</p> 
+       <p style='float:right;font-size:12px;'> total bill: {{account.total_bill| currency:'SAR':true}}</p> </div>
+       </button> 
+       </ion-list>
+</div>
+  <div *ngIf="myInput != null">
+    <ion-list> 
+    <ion-item *ngFor="let account of  onInput();" > 
+      <input item-start  type='checkbox' name='{{account.id}}' (change)="addprop1($event,account.total_bill)" />
+      <h2>{{account.account_number}}</h2> 
+    <div> <p style='float:left;'> total service:{{account.total_service}}</p> 
+       <p style='float:right;'> total bill:{{account.total_bill}}</p> </div>
+       </ion-item> 
+       </ion-list>
+    </div>
+
+
+
+
+</ion-content>
+<ion-footer style='padding:0px;'>
+  <ion-toolbar>
+    <button ion-button full *ngIf="ischeck()==false"  (click)="selectAll();"> SELECTALL 
+    <ion-label style='text-align:right;'> TOTAL:{{ gettotal() }} </ion-label>
+    </button>
+      <button ion-button full  *ngIf="ischeck()==true" (click)="unselectAll();"> UNSELECTALL 
+    <ion-label style='text-align:right;'> TOTAL:{{ gettotal() }} </ion-label>
+    </button>
+    <div id="pay">
+    <button ion-button full *ngIf="gettotal()>0">PAY</button>
+      <button ion-button full *ngIf="gettotal()==0" disabled>PAY</button></div>
+  </ion-toolbar>
+</ion-footer>
